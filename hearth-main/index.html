@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>something</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer" />
+  <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+  <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">XLR8</div>
+    <ul>
+      <li><a href="#">about</a></li>
+    </ul>
+  </header>
+
+  <main>
+    <div class="slogan">
+      <h1>Introducing XLR8</h1>
+      <div class="loader"></div>
+    </div>
+    <div>
+      <button onclick="startListening()">Start Listening</button>
+      <p id="transcription"></p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="icons">
+      <i class="fa-brands fa-github"></i>
+      <i class="fa-solid fa-envelope"></i>
+      <i class="fa-brands fa-x-twitter"></i>
+    </div>
+    <div class="footer-text">The modern way of education</div>
+  </footer>
+
+  <script>
+    let recognition;
+    const transcriptionElement = document.getElementById("transcription");
+
+    function startListening() {
+      if (!('webkitSpeechRecognition' in window)) {
+        alert("Speech recognition is not supported in this browser.");
+        return;
+      }
+
+      recognition = new webkitSpeechRecognition();
+      recognition.continuous = true; // Keep recognizing until stopped
+      recognition.interimResults = true; // Show results as they come
+      recognition.lang = "en-US"; // Set to English, change as needed
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        let transcript = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        transcriptionElement.textContent = transcript;
+      };
+
+      recognition.onerror = function(event) {
+        alert("Error occurred in speech recognition: " + event.error);
+      };
+    }
+  </script>
+</body>
+</html>
